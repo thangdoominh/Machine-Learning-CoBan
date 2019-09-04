@@ -30,7 +30,7 @@ def kmeans_display(X, label):
     plt.plot()
     plt.show()
 
-kmeans_display(X, original_label)
+# kmeans_display(X, original_label)
 
 # Khởi tạo các centers ban đầu
 def kmeans_innit_centers(X, K):
@@ -61,7 +61,9 @@ def has_converged(centers, new_centers):
             set([tuple(a) for a in new_centers]))
 
 def kmeans(X, K):
+    # print(X.shape[0])
     centers = [kmeans_innit_centers(X, K)]
+    # print(centers)
     labels = []
     it = 0
     while True:
