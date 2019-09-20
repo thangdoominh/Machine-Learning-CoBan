@@ -45,11 +45,18 @@ def kmeans_assign_labels(X, centers):
     D = cdist(X,centers)
     return np.argmin(D, axis = 1)
 
-# update new_center, numpy.,mean
-def kmeans_update_center(X, centers):
+# update new_center, numpy.mean
+def kmeans_update_center(X, label, K):
 
-    new_centers = []
+    new_centers = np.zeros((K, X.shape[1]))
 
+    for k in range(K):
+
+        Xk = X[label == 0, :]
+
+        new_centers[k, :] = np.mean(Xk, axis = 0)
+
+    return new_centers
 
 # check has converged
 # def has_converged( centers, new_centers):
@@ -59,4 +66,7 @@ def kmeans_update_center(X, centers):
 
 #test
 centers = kmeans_choice_centers(X, K)
-kmeans_assign_labels(X, centers)
+print ("Old centers = ",centers)
+label =  kmeans_assign_labels(X,centers)
+new_centers = kmeans_update_center(X,label , K)
+print("New centers = ", new_centers)
