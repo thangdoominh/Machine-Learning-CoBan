@@ -19,7 +19,7 @@ X = np.concatenate((X0, X1, X2), axis = 0)
 original_labels = np.asarray([0]*N + [1]*N + [2]*N).T
 
 # print(original_labels)
-def Kmeans_display(X, label):
+def kmeans_display(X, label):
     K = np.amax(label) + 1
     X0 = X[label == 0, :]
     X1 = X[label == 1, :]
@@ -52,21 +52,31 @@ def kmeans_update_center(X, label, K):
 
     for k in range(K):
 
-        Xk = X[label == 0, :]
+        Xk = X[label == k, :]
 
         new_centers[k, :] = np.mean(Xk, axis = 0)
 
     return new_centers
 
 # check has converged
-# def has_converged( centers, new_centers):
-
+def has_converged( centers, new_centers):
+    return (set([tuple(a) for a in centers]) == set([tuple(a) for a in new_centers]) )
 # update new_labels
 # calculator
 
-#test
-centers = kmeans_choice_centers(X, K)
-print ("Old centers = ",centers)
-label =  kmeans_assign_labels(X,centers)
-new_centers = kmeans_update_center(X,label , K)
-print("New centers = ", new_centers)
+def kmean(X, K):
+    centers = [kmeans_choice_centers(X,K)]
+    labels = []
+    count = 0
+    while True:
+        labels.append(kmeans_assign_labels(X, centers[-1]))
+        new_centers = kmeans_update_center(X, labels[-1], K)
+        if has_converged(centers[-1], new_centers):
+            break
+        centers.append(new_centers)
+        count += 1
+    return (centers, labels, count)
+(centers, labels, count) = kmean(X, K)
+print('Centers found by our algorithm: ')
+print(centers[-1])
+kmeans_display(X, labels[-1])
